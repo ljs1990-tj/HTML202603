@@ -59,11 +59,12 @@
             "STU_DEPT": "컴퓨터정보"
         }
     ]
-
+    let stuList = document.querySelector("#stu-list");
     for(let i=0; i<list.length; i++){
         console.log(list[i].STU_NAME);
         let li = document.createElement("li");
-        
+        li.innerHTML = list[i].STU_NO + " " + list[i].STU_NAME;
+        stuList.appendChild(li);
     }
 
 </script>
