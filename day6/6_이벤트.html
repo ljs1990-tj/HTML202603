@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <img id="img" src="../media/img1.png" width="300" height="300">
+
+</body>
+</html>
+<script>
+    let imgList = [
+        "../media/img2.jpg", 
+        "../media/img3.jpg", 
+        "../media/img4.jpg"
+    ];
+    let img = document.querySelector("#img");
+    img.addEventListener("mouseover", ()=>{
+        let ran = Math.floor(Math.random()*3);
+        img.src = imgList[ran];
+    });
+    img.addEventListener("mouseout", ()=>{
+        img.src = "../media/img1.png";
+    });
+
+    // 이벤트 종류
+    // click => 마우스 클릭했을 때
+    // dbclick => 더블 클릭했을 때
+    // mouseover, mouseout => 마우스 올라갔을 때, 떨어졌을 때
+    // mousedown => 마우스 누르고 있을 때
+    // mouseup => 마우스 뗏을 때
+    // mousemove => 마우스 움직일 때
+</script>
