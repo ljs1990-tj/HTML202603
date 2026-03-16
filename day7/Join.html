@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -19,7 +21,7 @@
         }
 
         /* 컨테이너 */
-        #container {
+        #app {
             background-color: #ffffff;
             width: 100%;
             max-width: 400px;
@@ -83,7 +85,17 @@
             margin-top: 15px;
             margin-bottom: 20px;
         }
-
+        .signup-btn-false {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
         .signup-btn:hover {
             background-color: #357ABD;
         }
@@ -103,39 +115,87 @@
         .bottom-links a:hover {
             text-decoration: underline;
         }
+
+        .input-group .userId {
+            width: 70%;
+        }
+        .input-group button{
+            margin-left : 10px;
+        }
     </style>
 </head>
 <body>
-    <div id="container">
-        <h2>회원가입</h2>
-        <p>새로운 계정을 만들어 서비스를 시작하세요.</p>
-        
-        <div class="input-group">
-            <span>이름</span>
-            <input type="text" placeholder="홍길동">
-        </div>
+    <div id="app">
+        <div id="container">
+            <h2>회원가입</h2>
+            <p>새로운 계정을 만들어 서비스를 시작하세요.</p>
+            
+            <div class="input-group">
+                <span>이름</span>
+                <input type="text" placeholder="홍길동">
+            </div>
 
-        <div class="input-group">
-            <span>아이디</span>
-            <input type="email" placeholder="아이디를 입력해주세요.">
-        </div>
-        
-        <div class="input-group">
-            <span>비밀번호</span>
-            <input type="password" placeholder="8자 이상 입력">
-        </div>
+            <div class="input-group">
+                <span>아이디</span>
+                <input v-if="!result" class="userId" type="text" v-model="userId" placeholder="아이디를 입력해주세요.">
+                <input v-else disabled class="userId" type="text" v-model="userId" placeholder="아이디를 입력해주세요.">
+                <button @click="fnCheck">중복체크</button>
+            </div>
+            
+            <div class="input-group">
+                <span>비밀번호</span>
+                <input type="password" placeholder="8자 이상 입력">
+            </div>
 
-        <div class="input-group">
-            <span>비밀번호 확인</span>
-            <input type="password" placeholder="비밀번호를 다시 입력하세요">
-        </div>
-        
-        <button class="signup-btn">가입하기</button>
-        
+            <div class="input-group">
+                <span>비밀번호 확인</span>
+                <input type="password" placeholder="비밀번호를 다시 입력하세요">
+            </div>
+            
+            <button v-if="result" class="signup-btn">가입하기</button> 
+            <button v-else class="signup-btn-false" disabled>가입하기</button>
+            
 
-        <div class="bottom-links">
-            이미 계정이 있으신가요? <a href="#">로그인</a>
+            <div class="bottom-links">
+                이미 계정이 있으신가요? <a href="#">로그인</a>
+            </div>
         </div>
     </div>
 </body>
 </html>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                userId : "",
+                result : false
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+            fnCheck : function () {
+                let self = this;
+                let param = {
+                    userId : self.userId
+                };
+                $.ajax({
+                    url: "http://192.168.30.57:3009/id-check",
+                    dataType: "json",
+                    type: "GET",
+                    data : param,
+                    success : function (data) {
+                        alert(data.message);
+                        self.result = data.success;
+                        
+                    }
+                });
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+        }
+    });
+
+    app.mount('#app');
+</script>

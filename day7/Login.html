@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
        
         * {
@@ -20,7 +22,7 @@
         }
 
         /* 컨테이너 */
-        #container {
+        #app {
             background-color: #ffffff;
             width: 100%;
             max-width: 380px;
@@ -111,30 +113,72 @@
 </head>
 
 <body>
-    <div id="container">
-        <h2>환영합니다</h2>
-        <p>서비스 이용을 위해 로그인해주세요.</p>
+    <div id="app">
+        <div id="container">
+            <h2>환영합니다</h2>
+            <p>서비스 이용을 위해 로그인해주세요.</p>
 
-        
-        <div class="input-group">
-            <span>아이디</span>
-            <input type="email" placeholder="아이디를 입력해주세요.">
-        </div>
+            
+            <div class="input-group">
+                <span>아이디</span>
+                <input type="text" v-model="userId" placeholder="아이디를 입력해주세요.">
+            </div>
 
-        <div class="input-group">
-            <span>비밀번호</span>
-            <input type="password" placeholder="비밀번호를 입력하세요">
-        </div>
+            <div class="input-group">
+                <span>비밀번호</span>
+                <input type="password" v-model="pwd" placeholder="비밀번호를 입력하세요">
+            </div>
+            
+            <button class="login-btn" @click="fnLogin">로그인</button>
 
-        <button class="login-btn">로그인</button>
-        
-
-        <div class="bottom-links">
-            <a href="#">비밀번호 찾기</a>
-            <span class="divider">|</span>
-            <a href="#">회원가입</a>
+            <div class="bottom-links">
+                <a href="#">비밀번호 찾기</a>
+                <span class="divider">|</span>
+                <a href="Join.html">회원가입</a>
+            </div>
         </div>
     </div>
 </body>
 
 </html>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                userId : "",
+                pwd : ""
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+            fnLogin : function () {
+                let self = this;
+                let param = {
+                    userId : self.userId,
+                    pwd : self.pwd
+                };
+                $.ajax({
+                    url: "http://192.168.30.57:3009/login",
+                    dataType: "json",
+                    type: "GET",
+                    data : param,
+                    // data: {userId : self.userId, pwd : self.pwd},
+                    success : function (data) {
+                        console.log(data);
+                        alert(data.message);
+                        if(data.success){
+                            location.href = "Main.html";
+                        }
+                        
+                    }
+                });
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+        }
+    });
+
+    app.mount('#app');
+</script>
