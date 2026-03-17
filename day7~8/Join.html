@@ -122,6 +122,14 @@
         .input-group button{
             margin-left : 10px;
         }
+        .warning-area {
+            height: 18px;
+        }
+        .input-group .warning-txt {
+            color: red;
+            font-size: 12px;
+            margin : 2px 5px;
+        }
     </style>
 </head>
 <body>
@@ -148,18 +156,27 @@
             <div class="input-group">
                 <span>비밀번호</span>
                 <input v-model="pwd1" type="password" placeholder="4자 이상 입력">
+                <div class="warning-area">
+                    <span v-if="pwd1.length < 4 && pwd1 != ''" class="warning-txt"> 
+                        * 비밀번호 4글자 이상
+                    </span>
+                </div>
             </div>
 
             <div class="input-group">
                 <span>비밀번호 확인</span>
                 <input v-model="pwd2" type="password" placeholder="비밀번호를 다시 입력하세요">
+                <div class="warning-area">
+                    <span v-if="pwd1 != pwd2" class="warning-txt"> 
+                        * 비밀번호가 다르다!!
+                    </span>
+                </div>
             </div>
             <!-- 3. -->
             <!-- 최초 진입 시 버튼 비활성화 -->
             <!-- result가 true(아이디 사용 가능)가 되면 활성화 -->
             <button v-if="result" class="signup-btn" @click="fnSignUp">가입하기</button> 
             <button v-else class="signup-btn-false" disabled>가입하기</button>
-            
 
             <div class="bottom-links">
                 이미 계정이 있으신가요? <a href="#">로그인</a>
