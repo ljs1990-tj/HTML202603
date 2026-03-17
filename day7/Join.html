@@ -132,7 +132,7 @@
             
             <div class="input-group">
                 <span>이름</span>
-                <input type="text" placeholder="홍길동">
+                <input type="text" v-model="name" placeholder="홍길동">
             </div>
 
             <div class="input-group">
@@ -147,17 +147,17 @@
             
             <div class="input-group">
                 <span>비밀번호</span>
-                <input type="password" placeholder="8자 이상 입력">
+                <input v-model="pwd1" type="password" placeholder="4자 이상 입력">
             </div>
 
             <div class="input-group">
                 <span>비밀번호 확인</span>
-                <input type="password" placeholder="비밀번호를 다시 입력하세요">
+                <input v-model="pwd2" type="password" placeholder="비밀번호를 다시 입력하세요">
             </div>
             <!-- 3. -->
             <!-- 최초 진입 시 버튼 비활성화 -->
             <!-- result가 true(아이디 사용 가능)가 되면 활성화 -->
-            <button v-if="result" class="signup-btn">가입하기</button> 
+            <button v-if="result" class="signup-btn" @click="fnSignUp">가입하기</button> 
             <button v-else class="signup-btn-false" disabled>가입하기</button>
             
 
@@ -174,6 +174,9 @@
             return {
                 // 변수 - (key : value)
                 userId : "",
+                name : "",
+                pwd1 : "",
+                pwd2 : "",
                 result : false // 0. 중복 체크 여부
             };
         },
@@ -181,6 +184,11 @@
             // 함수(메소드) - (key : function())
             fnCheck : function () {
                 let self = this;
+                if(self.userId.length < 4){
+                    alert("아이디는 4글자 이상!");
+                    // self.userId = "";
+                    return;
+                }
                 let param = {
                     userId : self.userId
                 };
@@ -197,6 +205,36 @@
                         
                     }
                 });
+            },
+            fnSignUp : function(){
+                let self = this;
+                if(self.pwd1.length < 4){
+                    alert("아이디 4글자 이상");
+                    return;
+                }
+                if(self.pwd1 != self.pwd2){
+                    alert("비밀번호 다르다!!!!!");
+                    return;
+                }
+
+                let param = {
+                    userId : self.userId,
+                    name : self.name,
+                    pwd : self.pwd1
+                };
+                $.ajax({
+                    url: "http://192.168.30.57:3009/add",
+                    dataType: "json",
+                    type: "GET",
+                    data : param,
+                    success : function (data) {
+                        console.log(data);
+                        alert(data.message);
+                        location.href="Login.html";
+                        
+                    }
+                });
+
             }
         }, // methods
         mounted() {
