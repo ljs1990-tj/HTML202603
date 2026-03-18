@@ -20,8 +20,8 @@
       </div>
 
       <div class="header-search">
-        <input type="text" placeholder="검색어를 입력하세요...">
-        <button type="button" class="search-btn">검색</button>
+        <input v-model="keyword" @keyup.enter="fnList" type="text" placeholder="검색어를 입력하세요...">
+        <button type="button" class="search-btn" @click="fnList">검색</button>
       </div>
 
       <div class="header-utils">
@@ -38,11 +38,11 @@
     <div class="box side">
       <div class="side-title">카테고리</div>
       <ul class="category-list">
-        <li><a href="#" class="active">전체 상품</a></li>
-        <li><a href="#">스마트폰</a></li>
-        <li><a href="#">게임기</a></li>
-        <li><a href="#">노트북</a></li>
-        <li><a href="#">기타</a></li>
+        <li><a href="#" class="active" @click="fnCategory('')">전체 상품</a></li>
+        <li><a href="#" @click="fnCategory('스마트폰')">스마트폰</a></li>
+        <li><a href="#" @click="fnCategory('게임기')">게임기</a></li>
+        <li><a href="#" @click="fnCategory('노트북')">노트북</a></li>
+        <li><a href="#" @click="fnCategory('태블릿')">태블릿</a></li>
       </ul>
 
       <div class="side-title">가격대</div>
@@ -56,9 +56,10 @@
 
     <div class="box content">
       <div class="product-card" v-for="item in list">
-        <img src="../media/img1.png" alt="상품 1" class="product-img">
+        <img :src="item.IMG_PATH" alt="상품 1" class="product-img">
         <div class="product-info">
           <div class="product-name">{{item.PRODUCT_NAME}}</div>
+          <div class="product-category">{{item.CATEGORY}}</div>
           <div class="product-price">{{item.PRICE_WON}}원</div>
         </div>
       </div>
@@ -75,7 +76,9 @@
         data() {
             return {
                 // 변수 - (key : value)
-                list : []
+                list : [],
+                keyword : "",
+                category : ""
             };
         },
         methods: {
@@ -86,12 +89,17 @@
                     url: "http://192.168.30.57:3009/product/list",
                     dataType: "json",
                     type: "GET",
-                    data: {keyword : "", brand : ""},
+                    data: {keyword : self.keyword, brand : "", category : self.category},
                     success: function (data) {
                         console.log(data);
                         self.list = data.productList;
                     }
                 });
+            },
+            fnCategory : function(category){
+              let self = this;
+              self.category = category;
+              self.fnList();
             }
         }, // methods
         mounted() {
