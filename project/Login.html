@@ -168,8 +168,12 @@
                         console.log(data);
                         alert(data.message);
                         if(data.success){
+                            localStorage.setItem("sessionId", data.userInfo.USERID);
+                            localStorage.setItem("sessionName", data.userInfo.USERNAME);
+                            localStorage.setItem("sessionGender", data.userInfo.GENDER);
                             location.href = "product-home.html";
                         }
+                       
                         
                     }
                 });

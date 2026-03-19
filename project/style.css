@@ -100,21 +100,23 @@ body {
 
 .dashboard-container {
   display: grid;
-  gap: 20px;
+  gap: 5px;
 
   grid-template-columns: 300px 1fr;
   /* 사이드 공간을 위해 2개로 나눔. 250px과 나머지*/
-  grid-template-rows: 150px minmax(800px, auto) 150px;
-  /* 헤더, 메인, 푸터 3개 영역 */
+  grid-template-rows: 150px minmax(200px, auto) minmax(800px, auto) 150px;
+  /* 헤더, 배너, 메인, 푸터 3개 영역 */
 
   grid-template-areas:
     "header header"
+    "banner banner"
     "side content"
     /* 왼쪽은 사이드바, 오른쪽은 콘텐츠 */
     "footer footer";
 }
 
 .header {grid-area: header;}
+.banner{grid-area : banner; padding : 0;}
 .side {grid-area: side;}
 .content {grid-area: content;}
 .footer {grid-area: footer;}
@@ -129,6 +131,7 @@ body {
 }
 
 .product-card {
+  cursor: pointer;
   background-color: white;
   border-radius: 10px;
   box-shadow: 2px 2px 5px #eee;
@@ -184,6 +187,7 @@ body {
     /* 1줄로 */
     grid-template-areas:
       "header"
+      "banner"
       "side"
       "content"
       "footer";
